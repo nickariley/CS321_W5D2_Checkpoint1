@@ -9,21 +9,31 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
 {
     public class PostRepository : IPostRepository
     {
+        private readonly AppDbContext _dbContext;
+
         public PostRepository(AppDbContext dbContext) 
         {  
+            _dbContext = dbContext;
         }
 
         public Post Get(int id)
         {
             // TODO: Implement Get(id). Include related Blog and Blog.User
-            throw new NotImplementedException();
+            return _dbContext.Posts
+                .Include(b=>b.Blog)
+                .ThenInclude(b=>b.User)
+                .SingleOrDefault(b=>b.Id == id);
         }
 
         public IEnumerable<Post> GetBlogPosts(int blogId)
         {
             // TODO: Implement GetBlogPosts, return all posts for given blog id
             // TODO: Include related Blog and AppUser
-            throw new NotImplementedException();
+            
+            return _dbContext.Posts
+                .Include(p => p.Blog)
+                .ThenInclude(p => p.User)
+                .Where(p => p.BlogId == blogId);
         }
 
         public Post Add(Post Post)

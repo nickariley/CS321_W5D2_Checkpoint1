@@ -30,7 +30,7 @@ namespace CS321_W5D2_BlogAPI.Core.Services
 
             if(currentUserId != currentBlog.UserId)
             {
-                throw new Exception("User unable to access blog.");
+                throw new Exception("You cannot access a blog that does not belong to you");
             }
 
             newPost.DatePublished = DateTime.Now;
@@ -58,12 +58,26 @@ namespace CS321_W5D2_BlogAPI.Core.Services
         {
             var post = this.Get(id);
             // TODO: prevent user from deleting from a blog that isn't theirs
+            var currentUserId = _userService.CurrentUserId;
+
+            if (post.Blog.UserId != currentUserId)
+            {
+                throw new Exception("You cannot delete a blog that does not belong to you");
+            }
+
             _postRepository.Remove(id);
         }
 
         public Post Update(Post updatedPost)
         {
             // TODO: prevent user from updating a blog that isn't theirs
+            var currentUserId = _userService.CurrentUserId;
+
+            if (currentUserId != updatedPost.Blog.UserId)
+            {
+                throw new Exception("You cannot update a blog that does not belong to you");
+            }
+
             return _postRepository.Update(updatedPost);
         }
 

@@ -56,10 +56,17 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public void Remove(int id)
         {
             //remove blog
-            // TODO: So to use int id, I have to take out Blog.Remove and just do .Remove. But in 
-            //W5D1 we used the equivalent of Blog blog in all our Removes.
-            _dbContext.Remove(id);
-            _dbContext.SaveChanges();
+            
+            var currentBlog = _dbContext.Blogs.FirstOrDefault(b => b.Id == id);
+
+            if (currentBlog != null)
+            {
+                _dbContext.Blogs.Remove(currentBlog);
+
+                _dbContext.SaveChanges();
+            }
+            
+            
         }
     }
 }

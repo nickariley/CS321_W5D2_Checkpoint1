@@ -23,6 +23,19 @@ namespace CS321_W5D2_BlogAPI.Core.Services
             //     Use the _userService to get the current users id.
             //     You may have to retrieve the blog in order to check user id
             // TODO: assign the current date to DatePublished
+
+            var currentUserId = _userService.CurrentUserId;
+
+            var currentBlog = _blogRepository.Get(newPost.BlogId);
+
+            if(currentUserId != currentBlog.UserId)
+            {
+                throw new Exception("User unable to access blog.");
+            }
+
+            newPost.DatePublished = DateTime.Now;
+
+
             return _postRepository.Add(newPost);
         }
 

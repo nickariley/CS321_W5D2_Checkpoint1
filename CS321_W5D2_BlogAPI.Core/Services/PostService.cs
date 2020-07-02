@@ -33,7 +33,6 @@ namespace CS321_W5D2_BlogAPI.Core.Services
                 throw new Exception("User unable to access blog.");
             }
 
-
             newPost.DatePublished = DateTime.Now;
 
 

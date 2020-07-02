@@ -20,9 +20,9 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         {
             // TODO: Implement Get(id). Include related Blog and Blog.User
             return _dbContext.Posts
-                .Include(b=>b.Blog)
+                .Include(p=>p.Blog)
                 .ThenInclude(b=>b.User)
-                .SingleOrDefault(b=>b.Id == id);
+                .SingleOrDefault(p=>p.Id == id);
         }
 
         public IEnumerable<Post> GetBlogPosts(int blogId)
@@ -32,32 +32,53 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
             
             return _dbContext.Posts
                 .Include(p => p.Blog)
-                .ThenInclude(p => p.User)
+                .ThenInclude(b => b.User)
                 .Where(p => p.BlogId == blogId);
         }
 
         public Post Add(Post Post)
         {
             // TODO: add Post
-            throw new NotImplementedException();
+            _dbContext.Posts.Add(Post);
+            _dbContext.SaveChanges();
+            return Post;
         }
 
         public Post Update(Post Post)
         {
             // TODO: update Post
-            throw new NotImplementedException();
+            var currentPost = _dbContext.Posts.Find(Post.Id);
+
+            if (currentPost == null) return null;
+
+            _dbContext.Entry(currentPost)
+                .CurrentValues
+                .SetValues(Post);
+
+            _dbContext.Posts.Update(currentPost);
+            _dbContext.SaveChanges();
+
+            return currentPost;
         }
 
         public IEnumerable<Post> GetAll()
         {
             // TODO: get all posts
-            throw new NotImplementedException();
+            return _dbContext.Posts
+                .Include(p => p.Blog);
+                
         }
 
         public void Remove(int id)
         {
             // TODO: remove Post
-            throw new NotImplementedException();
+            var currentPost = _dbContext.Posts.FirstOrDefault(p => p.Id == id);
+
+            if (currentPost != null)
+            {
+                _dbContext.Posts.Remove(currentPost);
+                _dbContext.SaveChanges();
+            }
         }
 
     }

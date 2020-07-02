@@ -20,13 +20,18 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public IEnumerable<Blog> GetAll()
         {
             // TODO: Retrieve all blgs. Include Blog.User.
-            return _dbContext.Blogs.Include(b => b.User).ToList();
+            return _dbContext.Blogs
+                .Include(b => b.Posts)
+                .ThenInclude(b => b.Blog.User);
         }
 
         public Blog Get(int id)
         {
             // TODO: Retrieve the blog by id. Include Blog.User.
-            return _dbContext.Blogs.Include(b => b.User).SingleOrDefault(b => b.Id == id);
+            return _dbContext.Blogs
+                .Include(b => b.Posts)
+                .ThenInclude(p=>p.Blog.User)
+                .SingleOrDefault(b => b.Id == id);
         }
 
         public Blog Add(Blog blog)

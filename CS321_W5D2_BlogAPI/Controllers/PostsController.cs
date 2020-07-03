@@ -71,6 +71,7 @@ namespace CS321_W5D2_BlogAPI.Controllers
         public IActionResult Post(int blogId, [FromBody]PostModel postModel)
         {
             // TODO: replace the code below with the correct implementation
+
             ModelState.AddModelError("AddPost", "Fix Me! Implement POST /api/blogs{blogId}/posts");
             return BadRequest(ModelState);
         }
